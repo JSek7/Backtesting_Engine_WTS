@@ -65,7 +65,10 @@ Keep market scenario packs and saved backtests in these folders:
 data/
     market_data/
         demo/                  # Included demo pack
-        training_001/          # Add an organiser-supplied pack here
+        internal_01/           # Organiser-supplied scenario packs
+        internal_02/
+        internal_03/
+        internal_04/
     runs/
         backtest_<timestamp>/  # Results and reports for each run
 ```
@@ -73,15 +76,18 @@ data/
 ### Validate a training pack without running a bot
 
 ```bash
-python run_backtest.py --scenario data/market_data/training_001 --validate-only
+python run_backtest.py --scenario data/market_data/internal_01 --validate-only
 ```
 
 ### Run your bot on the actual training pack
 
-Copy the **contents** of the organiser's exported pack into a folder such as:
+The supplied training scenarios are `internal_01`, `internal_02`, `internal_03`,
+and `internal_04`. Each pack lives directly under `data/market_data/`.
+To add a newly supplied scenario, copy its complete exported folder there.
+The pack's files must be directly inside its scenario folder:
 
 ```text
-data/market_data/training_001/
+data/market_data/internal_01/
     events.csv
     market_info.json
     README.md           # Optional pack-specific guide
@@ -90,7 +96,7 @@ data/market_data/training_001/
 Then run:
 
 ```bash
-python run_backtest.py --scenario data/market_data/training_001 --bot mine=bots/my_bot.py:MyBot --output data/runs/backtest_my_first_test
+python run_backtest.py --scenario data/market_data/internal_01 --bot mine=bots/my_bot.py:MyBot --output data/runs/backtest_my_first_test
 ```
 
 `mine` is the local name used in results. `bots/my_bot.py` is the file, and `MyBot`
@@ -102,12 +108,16 @@ silently overwritten. Omit `--output` to get a timestamped directory under
 `data/runs/` in the project root, named `backtest_<timestamp>`.
 Use `--output` to choose a different location or name.
 
+To select another scenario, change only `--scenario`, for example to
+`data/market_data/internal_02`. Point it at the folder containing `events.csv`
+and `market_info.json`, rather than at either file or an extra nested folder.
+
 ### Test against InventoryBot
 
 Add InventoryBot as a practice opponent by supplying a second `--bot` argument:
 
 ```bash
-python run_backtest.py --scenario data/market_data/training_001 --bot mine=bots/my_bot.py:MyBot --bot benchmark=bots/inventory_bot.py:InventoryBot --output data/runs/backtest_with_opponent
+python run_backtest.py --scenario data/market_data/internal_01 --bot mine=bots/my_bot.py:MyBot --bot benchmark=bots/inventory_bot.py:InventoryBot --output data/runs/backtest_with_opponent
 ```
 
 Both bots then compete in the **same** books for the same flow. This is different
@@ -124,11 +134,28 @@ Keep the `:InventoryBot` class suffix as shown. You can also use
 `bots/example_bot.py:ExampleBot` as a simpler fixed-spread opponent.
 Neither benchmark is an optimal strategy or a target score you must beat.
 
+### Run all four training scenarios
+
+From the repository root, with your environment active, run these commands
+one line at a time to test your bot against InventoryBot on each scenario:
+
+```powershell
+python run_backtest.py --scenario "data/market_data/internal_01" --bot "mine=bots/my_bot.py:MyBot" --bot "benchmark=bots/inventory_bot.py:InventoryBot"
+python run_backtest.py --scenario "data/market_data/internal_02" --bot "mine=bots/my_bot.py:MyBot" --bot "benchmark=bots/inventory_bot.py:InventoryBot"
+python run_backtest.py --scenario "data/market_data/internal_03" --bot "mine=bots/my_bot.py:MyBot" --bot "benchmark=bots/inventory_bot.py:InventoryBot"
+python run_backtest.py --scenario "data/market_data/internal_04" --bot "mine=bots/my_bot.py:MyBot" --bot "benchmark=bots/inventory_bot.py:InventoryBot"
+```
+
+Each command creates a separate `data/runs/backtest_<timestamp>/` folder and
+prints the path to each bot's interactive `report.html`. Omitting `--scenario`
+still uses the small demo pack. To test your bot alone, omit the second
+`--bot` argument.
+
 ### Other commands
 
 ```bash
 python run_backtest.py --help
-python run_backtest.py --scenario data/market_data/training_001 --asset A --no-charts
+python run_backtest.py --scenario data/market_data/internal_01 --asset A --no-charts
 python run_backtest.py --report data/runs/backtest_my_first_test
 python -m unittest discover -s tests -v
 ```
@@ -452,7 +479,7 @@ from bots.my_bot import MyBot
 from reporting.reports import generate_report
 from storage.results import save_results, load_results
 
-output = BacktestingRunner("data/market_data/training_001", {"mine": MyBot}).run()
+output = BacktestingRunner("data/market_data/internal_01", {"mine": MyBot}).run()
 print(output.results.bot_results["mine"].pnl)
 save_results(output, "data/runs/backtest_python_test")
 

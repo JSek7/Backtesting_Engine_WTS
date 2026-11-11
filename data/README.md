@@ -9,7 +9,10 @@ data/
         demo/
             events.csv
             market_info.json
-        training_001/          # Add organiser-supplied packs here
+        internal_01/           # Organiser-supplied scenario packs
+        internal_02/
+        internal_03/
+        internal_04/
     runs/
         backtest_<timestamp>/  # Results and reports for each run
 ```
@@ -17,19 +20,19 @@ data/
 `market_data/demo/` is an included, explicitly illustrative 80-tick smoke-test
 tape. It is not competition data and contains no proprietary market generator.
 
-Copy an organiser-exported public training pack to e.g.
-`data/market_data/training_001/`:
+The supplied scenarios are `internal_01` through `internal_04`. Copy any newly
+supplied exported pack folder directly into `data/market_data/`. For example:
 
 ```text
-data/market_data/training_001/events.csv
-data/market_data/training_001/market_info.json
+data/market_data/internal_01/events.csv
+data/market_data/internal_01/market_info.json
 ```
 
 Run:
 
 ```bash
-python run_backtest.py --scenario data/market_data/training_001 --validate-only
-python run_backtest.py --scenario data/market_data/training_001 --bot mine=bots/my_bot.py:MyBot
+python run_backtest.py --scenario data/market_data/internal_01 --validate-only
+python run_backtest.py --scenario data/market_data/internal_01 --bot mine=bots/my_bot.py:MyBot
 ```
 
 Backtest results are saved by default to `data/runs/backtest_<timestamp>/`.
@@ -46,7 +49,10 @@ python run_backtest.py --report data/runs/backtest_my_first_test
 
 Choose a new output directory for each backtest; existing results are never
 silently overwritten. Use a market pack folder such as `data/market_data/demo/`
-or `data/market_data/training_001/` for `--scenario`.
+or `data/market_data/internal_01/` for `--scenario`. Change the final folder name
+to `internal_02`, `internal_03`, or `internal_04` to select another supplied pack.
+See the [main README](../README.md#run-all-four-training-scenarios) for commands
+to test your bot against InventoryBot on all four scenarios.
 
 Use the saved run's full folder path when rebuilding reports with `--report`.
 
