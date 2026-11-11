@@ -4,6 +4,8 @@ A local Python backtester for the Trading Society mini-tournament. Write one bot
 quote several assets, replay an organiser-supplied public training pack, and inspect
 your trades, inventory, quotes and P&L.
 
+**Competition handbook:** [Warwick Trading Society IntraSoc Market-Making Handbook (PDF)](docs/handbook.pdf).
+
 **Start here:** edit [`bots/my_bot.py`](bots/my_bot.py), then run `python run_backtest.py`.
 The default run uses a deliberately small **demo tape** in `data/market_data/demo/`,
 not competition training data.
@@ -511,6 +513,7 @@ interrupt an infinite loop with Ctrl+C. This is not the hosted submission servic
 | `storage/results.py` | JSONL/CSV persistence and reloading |
 | `data/market_data/` | Demo and organiser-supplied market scenario packs |
 | `data/runs/` | Saved results and reports in `backtest_<timestamp>/` folders (ignored by Git) |
+| [`docs/handbook.pdf`](docs/handbook.pdf) | Competition handbook |
 | `docs/DATA_FORMAT.md` | Exact pack schema and replay semantics |
 | `tests/` | Execution, replay, timing, storage and report checks |
 
